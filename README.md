@@ -1,6 +1,6 @@
 # LiveSplit.Driv3r
 
-Auto Splitter for Driv3r (Driver 3)
+Auto Splitter for Driv3r (Driver 3).
 
 # Features
 1.Supporting patch versions v1.0, v2.0 and Ubisoft re-released ver.
