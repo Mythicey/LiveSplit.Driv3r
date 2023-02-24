@@ -14,7 +14,7 @@ Auto Splitter for Driv3r (Driver 3).
 
 2.Open Livesplit
 
-3.Right click Livesplit the click Edit Layout
+3.Right click Livesplit then click Edit Layout
 
 4.Click the 'Plus' sign -> Control -> Scriptable Auto Splitter
 
