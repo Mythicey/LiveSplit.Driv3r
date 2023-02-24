@@ -5,7 +5,7 @@ Auto Splitter for Driv3r (Driver 3).
 # Features
 1.Supporting patch versions v1.0, v2.0 and Ubisoft re-released ver.
 
-2.Supporting Auto Splitting for all undercover missions and all Timmys in mode Take a Ride.
+2.Supporting Auto Splitting for each undercover missions and each Timmy.
 
 3.Supporting options for which missions to split.
 
