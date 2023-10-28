@@ -3,15 +3,15 @@
 state("Driv3r","1.0"){                               // No-CD Patched v1.0
 	byte gamestate : 0x4da66d;                       // 1 = In Game
 	byte paused : 0x4da514;                          // 7 = Paused | In Menu
-	byte levelID : 0x4b84d4, 0x8;                    // 1 = Police HQ, 2 = Lead on Baccus. See settings part for more information.
+	byte missionID : 0x4b84d4, 0x8;                    // 1 = Police HQ, 2 = Lead on Baccus. See settings part for more information.
 	byte missionpassedtitle : 0x4b84dc, 0x4;         // 2 = Popping up
-	int timmyswasted : 0x4b83f4, 0x4, 0x66c, 0x7f8;  // Euqals Timmys that you have wasted in current mode
+	int timmyswasted : 0x4b83f4, 0x4, 0x66c, 0x7f8;  // Euqals number of Timmys that you have wasted in current mode
 }
 
 state("Driv3r","2.0"){                               // No-CD Patched v2.0
 	byte gamestate : 0x4dfd89;
 	byte paused : 0x4d6e2c;
-	byte levelID : 0x4ac3ac, 0x8;
+	byte missionID : 0x4ac3ac, 0x8;
 	byte missionpassedtitle : 0x4ac3b4, 0x4;
 	int timmyswasted : 0x4ac2cc, 0x4, 0x6e4, 0x528;
 }
@@ -19,7 +19,7 @@ state("Driv3r","2.0"){                               // No-CD Patched v2.0
 //state("Driv3r","Euro/USA"){                         // Original retail version
 //	byte gamestate : 0x4dfd89;
 //	byte paused : 0x4d6e2c;
-//	byte levelID : 0x4ac3ac, 0x8;
+//	byte missionID : 0x4ac3ac, 0x8;
 //	byte missionpassedtitle : 0x4ac3b4, 0x4;
 //	int timmyswasted : 0x4ac2cc, 0x4, 0x6e4, 0x528;
 //}
@@ -50,7 +50,7 @@ startup
 	// Set the autosplitter refresh rate (lower = less CPU and less accurate, higher = more CPU usage and more accurate) default: 60
 	refreshRate = 30;
 	
-	vars.counter = 1; //For Undercover missions
+	vars.mission_splitted = new List<byte>();
 	vars.timmyswastedinmiami = 0;
 	vars.timmyswastedinnice = 0;
 	vars.timmyswastedinistanbul = 0;
@@ -92,7 +92,7 @@ startup
 				settings.Add("U_M"+30, true, "Bomb Truck", "ista");
 				settings.Add("U_M"+31, true, "Chase The Train", "ista");
 		
-				//------Timmy Vermicellis------//
+		//------Timmy Vermicellis------//
 	    settings.Add("TVs", false, "Timmy Vermicellis"); 
 			settings.Add("miam_TVs", true, "Miami(Each)", "TVs");
 			settings.Add("miam_allTVs", true, "Miami(All)", "TVs");
@@ -104,48 +104,43 @@ startup
 }
 
 start{
-	
-	vars.counter = 1;  
-	vars.timmyswastedinmiami = 0;
-	vars.timmyswastedinnice = 0;
-	vars.timmyswastedinistanbul = 0;
 
 	if (current.gamestate == 1 && old.gamestate == 0)
 	{
 		return true;
 	}
 
+	vars.mission_splitted.Clear();
+	vars.timmyswastedinmiami = 0;
+	vars.timmyswastedinnice = 0;
+	vars.timmyswastedinistanbul = 0;
+
 }
 
 split{
 	//------Undercover Missions------//
-	if (current.missionpassedtitle == 2 && old.missionpassedtitle < 2 && current.levelID == vars.counter && current.paused != 7)
+	if (current.missionpassedtitle == 2 && old.missionpassedtitle < 2 && current.paused != 7 &! vars.mission_splitted.Contains(current.missionID) && current.missionID <= 31)
 	{
-		switch((byte)vars.counter)
-		{
-			case 11:case 19:case 22:case 25:case 28:
-			vars.counter=vars.counter+1;
-			break;
-		}
-		vars.counter=vars.counter+1;
-		return settings["U_M"+current.levelID];
+		vars.mission_splitted.Add(current.missionID);
+		//print("Mission "+current.missionID+" passed");
+		return settings["U_M"+current.missionID];
 	}
 
 	//------Timmy Vermicellis------//
-	else if (current.timmyswasted > old.timmyswasted && current.timmyswasted <11 && (((settings["miam_TVs"] && current.levelID == 77 && current.timmyswasted > vars.timmyswastedinmiami) || (settings["miam_allTVs"] && current.levelID == 77 && current.timmyswasted == 10)) || ((settings["nice_TVs"] && current.levelID == 80 && current.timmyswasted > vars.timmyswastedinnice) || (settings["nice_allTVs"] && current.levelID == 80 && current.timmyswasted == 10)) || ((settings["ista_TVs"] && current.levelID == 83 && current.timmyswasted > vars.timmywastsedinistanbul)|| (settings["ista_allTVs"] && current.levelID == 83 && current.timmyswasted == 10))) && current.paused != 7)
+	else if (current.timmyswasted > old.timmyswasted && current.timmyswasted <11 && (((settings["miam_TVs"] && current.missionID == 77 && current.timmyswasted > vars.timmyswastedinmiami) || (settings["miam_allTVs"] && current.missionID == 77 && current.timmyswasted == 10)) || ((settings["nice_TVs"] && current.missionID == 80 && current.timmyswasted > vars.timmyswastedinnice) || (settings["nice_allTVs"] && current.missionID == 80 && current.timmyswasted == 10)) || ((settings["ista_TVs"] && current.missionID == 83 && current.timmyswasted > vars.timmywastsedinistanbul)|| (settings["ista_allTVs"] && current.missionID == 83 && current.timmyswasted == 10))) && current.paused != 7)
 	{	
-		switch((byte)current.levelID)
+		switch((byte)current.missionID)
 		{
 			case 77:
-			vars.timmyswastedinmiami=current.timmyswasted;
+			vars.timmyswastedinmiami = current.timmyswasted;
 			break;
 
 			case 80:
-			vars.timmyswastedinnice=current.timmyswasted;
+			vars.timmyswastedinnice = current.timmyswasted;
 			break;
 
 			case 83:
-			vars.timmyswastedinistanbul=current.timmyswasted;
+			vars.timmyswastedinistanbul = current.timmyswasted;
 			break;
 		}
 		return true;
@@ -154,5 +149,5 @@ split{
 
 reset
 {
-	return (((current.gamestate == 1 && old.gamestate == 0) && current.levelID == 1) || (current.levelID ==1 && old.levelID != 1)) && TimeSpan.Parse(timer.CurrentTime.RealTime.ToString()).TotalSeconds > 5;
+	return (((current.gamestate == 1 && old.gamestate == 0) && current.missionID == 1) || (current.missionID ==1 && old.missionID != 1)) && TimeSpan.Parse(timer.CurrentTime.RealTime.ToString()).TotalSeconds > 5;
 }
