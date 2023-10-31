@@ -1,22 +1,40 @@
 //Autosplitter by Mythicy for Driv3r.
 
-state("Driv3r","1.0"){                               // No-CD Patched v1.0
-	byte gamestate : 0x4da66d;                       // 1 = In Game
-	byte paused : 0x4da514;                          // 7 = Paused | In Menu
-	byte missionID : 0x4b84d4, 0x8;                    // 1 = Police HQ, 2 = Lead on Baccus. See settings part for more information.
-	byte missionpassedtitle : 0x4b84dc, 0x4;         // 2 = Popping up
-	int timmyswasted : 0x4b83f4, 0x4, 0x66c, 0x7f8;  // Euqals number of Timmys that you have wasted in current mode
+state("Driv3r","1.0"){								// No-CD Patched v1.0
+	byte gamestate : 0x4da66d;						// 1 = In Game
+	byte paused : 0x4da514;							// 7 = Paused | In Menu
+	byte missionID : 0x4b84d4, 0x8;					// 1 = Police HQ, 2 = Lead on Baccus. See settings part for more information.
+	byte missionpassedtitle : 0x4b84dc, 0x4;		// 2 = Popping up
+	int timmyswasted : 0x4b83f4, 0x4, 0x66c, 0x7f8;	// Euqals number of Timmys that you have wasted in current mode
+	byte miamisecretcar1 : 0x4b86b4, 0x1B5;			// Shelby Cobra
+	byte miamisecretcar2 : 0x4b86b4, 0x1B6;			// Ford GT40
+	byte miamisecretcar3 : 0x4b86b4, 0x1B7;			// Made For Game Kart
+	byte nicesecretcar1 : 0x4b86b4, 0x1BB;			// Plymouth Prowler
+	byte nicesecretcar2 : 0x4b86b4, 0x1BC;			// Clark CH-60
+	byte nicesecretcar3 : 0x4b86b4, 0x1BD;			// Volkswagen Transporter (Typ 2/T2)
+	byte istanbulsecretcar1 : 0x4b86b4, 0x1BE;		// Auto Union Type D
+	byte istanbulsecretcar2 : 0x4b86b4, 0x1BF;		// Bugatti Type 57 SC
+	byte istanbulsecretcar3 : 0x4b86b4, 0x1C0;		// 1935 Auburn 851 Speedster
 }
 
-state("Driv3r","2.0"){                               // No-CD Patched v2.0
-	byte gamestate : 0x4dfd89;
-	byte paused : 0x4d6e2c;
-	byte missionID : 0x4ac3ac, 0x8;
-	byte missionpassedtitle : 0x4ac3b4, 0x4;
-	int timmyswasted : 0x4ac2cc, 0x4, 0x6e4, 0x528;
+state("Driv3r","2.0"){								// No-CD Patched v2.0
+	byte gamestate : 0x4dfd89;						// 1 = In Game
+	byte paused : 0x4d6e2c;							// 7 = Paused | In Menu
+	byte missionID : 0x4ac3ac, 0x8;					// 1 = Police HQ, 2 = Lead on Baccus. See settings part for more information.
+	byte missionpassedtitle : 0x4ac3b4, 0x4;		// 2 = Popping up
+	int timmyswasted : 0x4ac2cc, 0x4, 0x6e4, 0x528;	// Euqals number of Timmys that you have wasted in current mode
+	byte miamisecretcar1 : 0x4ac58c, 0x1B5;			// Shelby Cobra
+	byte miamisecretcar2 : 0x4ac58c, 0x1B6;			// Ford GT40
+	byte miamisecretcar3 : 0x4ac58c, 0x1B7;			// Made For Game Kart
+	byte nicesecretcar1 : 0x4ac58c, 0x1BB;			// Plymouth Prowler
+	byte nicesecretcar2 : 0x4ac58c, 0x1BC;			// Clark CH-60
+	byte nicesecretcar3 : 0x4ac58c, 0x1BD;			// Volkswagen Transporter (Typ 2/T2)
+	byte istanbulsecretcar1 : 0x4ac58c, 0x1BE;		// Auto Union Type D
+	byte istanbulsecretcar2 : 0x4ac58c, 0x1BF;		// Bugatti Type 57 SC
+	byte istanbulsecretcar3 : 0x4ac58c, 0x1C0;		// 1935 Auburn 851 Speedster
 }
 
-//state("Driv3r","Euro/USA"){                         // Original retail version
+//state("Driv3r","Euro/USA"){						// Original retail version
 //	byte gamestate : 0x4dfd89;
 //	byte paused : 0x4d6e2c;
 //	byte missionID : 0x4ac3ac, 0x8;
@@ -101,19 +119,33 @@ startup
 			settings.Add("ista_TVs", true, "Istanbul(Each)", "TVs");
 			settings.Add("ista_allTVs", true, "Istanbul(All)", "TVs");
 
+		//------Secret Cars------//
+	    settings.Add("SCs", false, "Secret Cars"); 
+			settings.Add("miam_SCs", true, "Miami", "SCs");
+				settings.Add("miam_SC1", true, "Shelby Cobra", "miam_SCs");
+				settings.Add("miam_SC2", true, "Ford GT40", "miam_SCs");
+				settings.Add("miam_SC3", true, "Made For Game Kart", "miam_SCs");
+			settings.Add("nice_SCs", true, "Nice", "SCs");
+				settings.Add("nice_SC1", true, "Plymouth Prowler", "nice_SCs");
+				settings.Add("nice_SC2", true, "Clark CH-60", "nice_SCs");
+				settings.Add("nice_SC3", true, "Volkswagen Transporter (Typ 2/T2)", "nice_SCs");
+			settings.Add("ista_SCs", true, "Istanbul", "SCs");
+				settings.Add("ista_SC1", true, "Auto Union Type D", "ista_SCs");
+				settings.Add("ista_SC2", true, "Bugatti Type 57 SC", "ista_SCs");
+				settings.Add("ista_SC3", true, "1935 Auburn 851 Speedster", "ista_SCs");
+
 }
 
 start{
 
 	if (current.gamestate == 1 && old.gamestate == 0)
 	{
+		vars.mission_splitted.Clear();
+		vars.timmyswastedinmiami = 0;
+		vars.timmyswastedinnice = 0;
+		vars.timmyswastedinistanbul = 0;
 		return true;
 	}
-
-	vars.mission_splitted.Clear();
-	vars.timmyswastedinmiami = 0;
-	vars.timmyswastedinnice = 0;
-	vars.timmyswastedinistanbul = 0;
 
 }
 
@@ -127,7 +159,7 @@ split{
 	}
 
 	//------Timmy Vermicellis------//
-	else if (current.timmyswasted > old.timmyswasted && current.timmyswasted <11 && (((settings["miam_TVs"] && current.missionID == 77 && current.timmyswasted > vars.timmyswastedinmiami) || (settings["miam_allTVs"] && current.missionID == 77 && current.timmyswasted == 10)) || ((settings["nice_TVs"] && current.missionID == 80 && current.timmyswasted > vars.timmyswastedinnice) || (settings["nice_allTVs"] && current.missionID == 80 && current.timmyswasted == 10)) || ((settings["ista_TVs"] && current.missionID == 83 && current.timmyswasted > vars.timmywastsedinistanbul)|| (settings["ista_allTVs"] && current.missionID == 83 && current.timmyswasted == 10))) && current.paused != 7)
+	else if (current.timmyswasted > old.timmyswasted && current.timmyswasted <11 && (((settings["miam_TVs"] && current.missionID == 77 && current.timmyswasted > vars.timmyswastedinmiami) || (settings["miam_allTVs"] && current.missionID == 77 && current.timmyswasted == 10)) || ((settings["nice_TVs"] && current.missionID == 80 && current.timmyswasted > vars.timmyswastedinnice) || (settings["nice_allTVs"] && current.missionID == 80 && current.timmyswasted == 10)) || ((settings["ista_TVs"] && current.missionID == 83 && current.timmyswasted > vars.timmywastsedinistanbul)|| (settings["ista_allTVs"] && current.missionID == 83 && current.timmyswasted == 10))) && current.gamestate != 0)
 	{	
 		switch((byte)current.missionID)
 		{
@@ -145,6 +177,23 @@ split{
 		}
 		return true;
 	}
+
+	//------Secret Cars------//
+	else if (((current.miamisecretcar1 == 1 && old.miamisecretcar1 == 0 && settings["miam_SC1"]) || (current.miamisecretcar2 == 1 && old.miamisecretcar2 == 0 && settings["miam_SC2"]) || (current.miamisecretcar3 == 1 && old.miamisecretcar3 == 0 && settings["miam_SC3"])) && current.gamestate != 0)
+	{
+		return true;
+	}
+
+	else if (((current.nicesecretcar1 == 1 && old.nicesecretcar1 == 0 && settings["nice_SC1"]) || (current.nicesecretcar2 == 1 && old.nicesecretcar2 == 0 && settings["nice_SC2"]) || (current.nicesecretcar3 == 1 && old.nicesecretcar3 == 0 && settings["nice_SC3"])) && current.gamestate != 0)
+	{
+		return true;
+	}
+
+	else if (((current.istanbulsecretcar1 == 1 && old.istanbulsecretcar1 == 0 && settings["ista_SC1"]) || (current.istanbulsecretcar2 == 1 && old.istanbulsecretcar2 == 0 && settings["ista_SC2"]) || (current.istanbulsecretcar3 == 1 && old.istanbulsecretcar3 == 0 && settings["ista_SC3"])) && current.gamestate != 0)
+	{
+		return true;
+	}
+
 }
 
 reset
