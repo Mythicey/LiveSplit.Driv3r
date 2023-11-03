@@ -5,16 +5,6 @@ state("Driv3r","1.0"){								// No-CD Patched v1.0
 	byte paused : 0x4da5e4;							// 7 = Paused | In Menu
 	byte missionID : 0x4b84d4, 0x8;					// 1 = Police HQ, 2 = Lead on Baccus. See settings part for more information.
 	byte missionpassedtitle : 0x4b84dc, 0x4;		// 2 = Popping up
-	byte timmyswasted : 0x4b8408, 0x8, 0x6;			// Euqals number of Timmys that you have wasted in current mode
-	byte miamisecretcar1 : 0x4b86b4, 0x1B5;			// Shelby Cobra
-	byte miamisecretcar2 : 0x4b86b4, 0x1B6;			// Ford GT40
-	byte miamisecretcar3 : 0x4b86b4, 0x1B7;			// Made For Game Kart
-	byte nicesecretcar1 : 0x4b86b4, 0x1BB;			// Plymouth Prowler
-	byte nicesecretcar2 : 0x4b86b4, 0x1BC;			// Clark CH-60
-	byte nicesecretcar3 : 0x4b86b4, 0x1BD;			// Volkswagen Transporter (Typ 2/T2)
-	byte istanbulsecretcar1 : 0x4b86b4, 0x1BE;		// Auto Union Type D
-	byte istanbulsecretcar2 : 0x4b86b4, 0x1BF;		// Bugatti Type 57 SC
-	byte istanbulsecretcar3 : 0x4b86b4, 0x1C0;		// 1935 Auburn 851 Speedster
 }
 
 state("Driv3r","2.0"){								// No-CD Patched v2.0
@@ -22,16 +12,7 @@ state("Driv3r","2.0"){								// No-CD Patched v2.0
 	byte paused : 0x4d6e2c;							// 7 = Paused | In Menu
 	byte missionID : 0x4ac3ac, 0x8;					// 1 = Police HQ, 2 = Lead on Baccus. See settings part for more information.
 	byte missionpassedtitle : 0x4ac3b4, 0x4;		// 2 = Popping up
-	byte timmyswasted : 0x4ac2e0, 0x8, 0x6;			// Euqals number of Timmys that you have wasted in current mode. DE 4C 6F 67 69 63 20 45 78 70 6F 72 74 20 44 61 74 61
-	byte miamisecretcar1 : 0x4ac58c, 0x1B5;			// Shelby Cobra
-	byte miamisecretcar2 : 0x4ac58c, 0x1B6;			// Ford GT40
-	byte miamisecretcar3 : 0x4ac58c, 0x1B7;			// Made For Game Kart
-	byte nicesecretcar1 : 0x4ac58c, 0x1BB;			// Plymouth Prowler
-	byte nicesecretcar2 : 0x4ac58c, 0x1BC;			// Clark CH-60
-	byte nicesecretcar3 : 0x4ac58c, 0x1BD;			// Volkswagen Transporter (Typ 2/T2)
-	byte istanbulsecretcar1 : 0x4ac58c, 0x1BE;		// Auto Union Type D
-	byte istanbulsecretcar2 : 0x4ac58c, 0x1BF;		// Bugatti Type 57 SC
-	byte istanbulsecretcar3 : 0x4ac58c, 0x1C0;		// 1935 Auburn 851 Speedster
+//	byte collectibles : 0x4ac58c, 0x180;			// 1 = Collected, 0 = Not Collected. 0x180 = 1st Timmy in Miami, 0x18A = 1st Timmy in Nice, 0x194 = 1st Timmy in Istanbul, 0x1B5 = 1st Secret Car in Miami, 0x1BB = 1st Secret Car in Nice, 0x1BE = 1st Secret Car in Istanbul...
 }
 
 //state("Driv3r","Euro/USA"){						// Original retail version
@@ -47,12 +28,11 @@ init{
     switch(modules.First().ModuleMemorySize){
 	case 5177344:
         version = "1.0";
+		vars.collectiblebaseaddr = 0x4b86b4;
         break;
-	case 5337088:
+	case 5337088: case 5332992:
         version = "2.0";
-        break;
-	case 5332992:
-        version = "2.0";
+		vars.collectiblebaseaddr = 0x4ac58c;
         break;
 //	case 7405568:
 //        version = "Euro/USA";
@@ -61,6 +41,57 @@ init{
         print("Unknown version detected");
         return false;
     }
+
+	// Adds collectibles memory addresses (with the correct offset) to the watcher list.
+	vars.memoryWatchers = new MemoryWatcherList();
+	
+	//------Timmy Vermicellis in Miami------//
+	for(int i = 0x0; i<=9; ++i)
+	{
+		vars.memoryWatchers.Add(new MemoryWatcher<byte>(new DeepPointer(vars.collectiblebaseaddr, 0x180 + i)){ Name = "miamTim"+(i+1).ToString() });
+	}
+	
+	//------Timmy Vermicellis in Nice------//
+	for(int i = 0x0; i<=9; ++i)
+	{
+		vars.memoryWatchers.Add(new MemoryWatcher<byte>(new DeepPointer(vars.collectiblebaseaddr, 0x18A + i)){ Name = "niceTim"+(i+1).ToString() });
+	}
+	
+	//------Timmy Vermicellis in Istanbul------//
+	for(int i = 0x0; i<=9; ++i)
+	{
+		vars.memoryWatchers.Add(new MemoryWatcher<byte>(new DeepPointer(vars.collectiblebaseaddr, 0x194 + i)){ Name = "istaTim"+(i+1).ToString() });
+	}
+
+	//------Secret Cars in Miami------//
+	for(int i = 0x0; i<=2; ++i)
+	{
+		vars.memoryWatchers.Add(new MemoryWatcher<byte>(new DeepPointer(vars.collectiblebaseaddr, 0x1B5 + i)){ Name = "miamSC"+(i+1).ToString() });
+	}
+
+	//------Secret Cars in Nice------//
+	for(int i = 0x0; i<=2; ++i)
+	{
+		vars.memoryWatchers.Add(new MemoryWatcher<byte>(new DeepPointer(vars.collectiblebaseaddr, 0x1BB + i)){ Name = "niceSC"+(i+1).ToString() });
+	}
+
+	//------Secret Cars in Istanbul------//
+	for(int i = 0x0; i<=2; ++i)
+	{
+		vars.memoryWatchers.Add(new MemoryWatcher<byte>(new DeepPointer(vars.collectiblebaseaddr, 0x1BE + i)){ Name = "istaSC"+(i+1).ToString() });
+	}
+
+}
+
+update
+{
+	// Disables all the action blocks below in the code if the user is using an unsupported version.
+	if (version == "")
+		return false;
+		
+	// Update all of the memory readings for the collectible memory addresses.
+	vars.memoryWatchers.UpdateAll(game);
+
 }
 
 startup
@@ -69,7 +100,6 @@ startup
 	refreshRate = 30;
 	
 	vars.mission_splitted = new List<byte>();
-	vars.valid_timmy_number = new List<byte>(){1,2,3,4,5,6,7,8,9,10};
 	vars.timmyswastedinmiami = 0;
 	vars.timmyswastedinnice = 0;
 	vars.timmyswastedinistanbul = 0;
@@ -135,6 +165,7 @@ startup
 				settings.Add("ista_SC2", true, "Bugatti Type 57 SC", "ista_SCs");
 				settings.Add("ista_SC3", true, "1935 Auburn 851 Speedster", "ista_SCs");
 
+
 }
 
 start{
@@ -159,40 +190,104 @@ split{
 		return settings["U_M"+current.missionID];
 	}
 
-	//------Timmy Vermicellis------//
-	else if (vars.valid_timmy_number.Contains(current.timmyswasted) && (((settings["miam_TVs"] && current.missionID == 77 && current.timmyswasted > vars.timmyswastedinmiami) || (settings["miam_allTVs"] && current.missionID == 77 && current.timmyswasted > 9 && old.timmyswasted == 9)) || ((settings["nice_TVs"] && current.missionID == 80 && current.timmyswasted > vars.timmyswastedinnice) || (settings["nice_allTVs"] && current.missionID == 80 && current.timmyswasted > 9 && old.timmyswasted == 9)) || ((settings["ista_TVs"] && current.missionID == 83 && current.timmyswasted > vars.timmyswastedinistanbul) || (settings["ista_allTVs"] && current.missionID == 83 && current.timmyswasted > 9 && old.timmyswasted == 9))) && current.gamestate != 0)
-	{
-		switch((byte)current.missionID)
-		{
-			case 77:
-			vars.timmyswastedinmiami ++;
-			break;
-
-			case 80:
-			vars.timmyswastedinnice ++;
-			break;
-
-			case 83:
-			vars.timmyswastedinistanbul ++;
-			break;
-		}
-		return true;
-	}
-
 	//------Secret Cars------//
-	else if (((current.miamisecretcar1 == 1 && old.miamisecretcar1 == 0 && settings["miam_SC1"]) || (current.miamisecretcar2 == 1 && old.miamisecretcar2 == 0 && settings["miam_SC2"]) || (current.miamisecretcar3 == 1 && old.miamisecretcar3 == 0 && settings["miam_SC3"])) && current.gamestate != 0)
+	foreach(var secretcar in vars.memoryWatchers)
 	{
-		return true;
+		if (secretcar.Current == 1 && secretcar.Old == 0 && current.gamestate != 0)
+		{
+			if (secretcar.Name.Contains("miamSC"))
+			{
+				if (secretcar.Name.Contains("1"))
+				{
+					return settings["miam_SC1"];
+				}
+				else if (secretcar.Name.Contains("2"))
+				{
+					return settings["miam_SC2"];
+				}
+				else if (secretcar.Name.Contains("3"))
+				{
+					return settings["miam_SC3"];
+				}
+			}
+			else if (secretcar.Name.Contains("niceSC"))
+			{
+				if (secretcar.Name.Contains("1"))
+				{
+					return settings["nice_SC1"];
+				}
+				else if (secretcar.Name.Contains("2"))
+				{
+					return settings["nice_SC2"];
+				}
+				else if (secretcar.Name.Contains("3"))
+				{
+					return settings["nice_SC3"];
+				}
+			}
+			else if (secretcar.Name.Contains("istaSC"))
+			{
+				if (secretcar.Name.Contains("1"))
+				{
+					return settings["ista_SC1"];
+				}
+				else if (secretcar.Name.Contains("2"))
+				{
+					return settings["ista_SC2"];
+				}
+				else if (secretcar.Name.Contains("3"))
+				{
+					return settings["ista_SC3"];
+				}
+			}
+		}
 	}
 
-	else if (((current.nicesecretcar1 == 1 && old.nicesecretcar1 == 0 && settings["nice_SC1"]) || (current.nicesecretcar2 == 1 && old.nicesecretcar2 == 0 && settings["nice_SC2"]) || (current.nicesecretcar3 == 1 && old.nicesecretcar3 == 0 && settings["nice_SC3"])) && current.gamestate != 0)
+	//------Timmy Vermicellis------//
+	foreach(var timmy in vars.memoryWatchers)
 	{
-		return true;
-	}
-
-	else if (((current.istanbulsecretcar1 == 1 && old.istanbulsecretcar1 == 0 && settings["ista_SC1"]) || (current.istanbulsecretcar2 == 1 && old.istanbulsecretcar2 == 0 && settings["ista_SC2"]) || (current.istanbulsecretcar3 == 1 && old.istanbulsecretcar3 == 0 && settings["ista_SC3"])) && current.gamestate != 0)
-	{
-		return true;
+		if (timmy.Current == 1 && timmy.Old == 0 && current.gamestate != 0)
+		{
+			if (timmy.Name.Contains("miamTim"))
+			{
+				vars.timmyswastedinmiami++;
+				//print("Miami Timmy "+vars.timmyswastedinmiami+" wasted");
+				if (vars.timmyswastedinmiami == 10)
+				{
+					return settings["miam_allTVs"];
+				}
+				else
+				{
+					return settings["miam_TVs"];
+				}
+			}
+			else if (timmy.Name.Contains("niceTim"))
+			{
+				vars.timmyswastedinnice++;
+				//print("Nice Timmy "+vars.timmyswastedinnice+" wasted");
+				if (vars.timmyswastedinnice == 10)
+				{
+					return settings["nice_allTVs"];
+				}
+				else
+				{
+					return settings["nice_TVs"];
+				}
+			}
+			else if (timmy.Name.Contains("istaTim"))
+			{
+				vars.timmyswastedinistanbul++;
+				//print("Istanbul Timmy "+vars.timmyswastedinistanbul+" wasted");
+				if (vars.timmyswastedinistanbul == 10)
+				{
+					return settings["ista_allTVs"];
+				}
+				else
+				{
+					return settings["ista_TVs"];
+				}
+			}
+		}
 	}
 
 }
