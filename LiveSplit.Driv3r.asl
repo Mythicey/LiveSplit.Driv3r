@@ -20,7 +20,6 @@ state("Driv3r","2.0"){								// No-CD Patched v2.0
 //	byte paused : 0x4d6e2c;
 //	byte missionID : 0x4ac3ac, 0x8;
 //	byte missionpassedtitle : 0x4ac3b4, 0x4;
-//	int timmyswasted : 0x4ac2cc, 0x4, 0x6e4, 0x528;
 //}
 
 init{
@@ -99,7 +98,7 @@ startup
 	// Set the autosplitter refresh rate (lower = less CPU and less accurate, higher = more CPU usage and more accurate) default: 60
 	refreshRate = 30;
 	
-	vars.mission_splitted = new List<byte>();
+	vars.missions_splitted = new List<byte>();
 	vars.timmyswastedinmiami = 0;
 	vars.timmyswastedinnice = 0;
 	vars.timmyswastedinistanbul = 0;
@@ -172,7 +171,7 @@ start{
 
 	if (current.gamestate == 1 && old.gamestate == 0)
 	{
-		vars.mission_splitted.Clear();
+		vars.missions_splitted.Clear();
 		vars.timmyswastedinmiami = 0;
 		vars.timmyswastedinnice = 0;
 		vars.timmyswastedinistanbul = 0;
@@ -183,9 +182,9 @@ start{
 
 split{
 	//------Undercover Missions------//
-	if (current.missionpassedtitle == 2 && old.missionpassedtitle < 2 && current.paused != 7 &! vars.mission_splitted.Contains(current.missionID) && current.missionID <= 31)
+	if (current.missionpassedtitle == 2 && old.missionpassedtitle < 2 && current.paused != 7 &! vars.missions_splitted.Contains(current.missionID) && current.missionID <= 31)
 	{
-		vars.mission_splitted.Add(current.missionID);
+		vars.missions_splitted.Add(current.missionID);
 		//print("Mission "+current.missionID+" passed");
 		return settings["U_M"+current.missionID];
 	}
