@@ -189,106 +189,103 @@ split{
 		return settings["U_M"+current.missionID];
 	}
 
-	//------Secret Cars------//
-	foreach(var secretcar in vars.memoryWatchers)
+	//------Collectibles------//
+	else if((current.missionID == 77 || current.missionID == 80 || current.missionID == 83) && current.gamestate != 0)
 	{
-		if (secretcar.Current == 1 && secretcar.Old == 0 && current.gamestate != 0)
+		foreach(var value in vars.memoryWatchers)
 		{
-			if (secretcar.Name.Contains("miamSC"))
+			if (value.Current == 1 && value.Old == 0)
 			{
-				if (secretcar.Name.Contains("1"))
+				//------Timmy Vermicellis------//
+				if (value.Name.Contains("miamTim"))
 				{
-					return settings["miam_SC1"];
+					vars.timmyswastedinmiami++;
+					//print("Miami Timmy "+vars.timmyswastedinmiami+" wasted");
+					if (vars.timmyswastedinmiami == 10)
+					{
+						return settings["miam_allTVs"];
+					}
+					else
+					{
+						return settings["miam_TVs"];
+					}
 				}
-				else if (secretcar.Name.Contains("2"))
+				else if (value.Name.Contains("niceTim"))
 				{
-					return settings["miam_SC2"];
+					vars.timmyswastedinnice++;
+					//print("Nice Timmy "+vars.timmyswastedinnice+" wasted");
+					if (vars.timmyswastedinnice == 10)
+					{
+						return settings["nice_allTVs"];
+					}
+					else
+					{
+						return settings["nice_TVs"];
+					}
 				}
-				else if (secretcar.Name.Contains("3"))
+				else if (value.Name.Contains("istaTim"))
 				{
-					return settings["miam_SC3"];
+					vars.timmyswastedinistanbul++;
+					//print("Istanbul Timmy "+vars.timmyswastedinistanbul+" wasted");
+					if (vars.timmyswastedinistanbul == 10)
+					{
+						return settings["ista_allTVs"];
+					}
+					else
+					{
+						return settings["ista_TVs"];
+					}
 				}
-			}
-			else if (secretcar.Name.Contains("niceSC"))
-			{
-				if (secretcar.Name.Contains("1"))
+				
+				//------Secret Cars------//
+				else if (value.Name.Contains("miamSC"))
 				{
-					return settings["nice_SC1"];
+					if (value.Name.Contains("1"))
+					{
+						return settings["miam_SC1"];
+					}
+					else if (value.Name.Contains("2"))
+					{
+						return settings["miam_SC2"];
+					}
+					else if (value.Name.Contains("3"))
+					{
+						return settings["miam_SC3"];
+					}
 				}
-				else if (secretcar.Name.Contains("2"))
+				else if (value.Name.Contains("niceSC"))
 				{
-					return settings["nice_SC2"];
+					if (value.Name.Contains("1"))
+					{
+						return settings["nice_SC1"];
+					}
+					else if (value.Name.Contains("2"))
+					{
+						return settings["nice_SC2"];
+					}
+					else if (value.Name.Contains("3"))
+					{
+						return settings["nice_SC3"];
+					}
 				}
-				else if (secretcar.Name.Contains("3"))
+				else if (value.Name.Contains("istaSC"))
 				{
-					return settings["nice_SC3"];
-				}
-			}
-			else if (secretcar.Name.Contains("istaSC"))
-			{
-				if (secretcar.Name.Contains("1"))
-				{
-					return settings["ista_SC1"];
-				}
-				else if (secretcar.Name.Contains("2"))
-				{
-					return settings["ista_SC2"];
-				}
-				else if (secretcar.Name.Contains("3"))
-				{
-					return settings["ista_SC3"];
+					if (value.Name.Contains("1"))
+					{
+						return settings["ista_SC1"];
+					}
+					else if (value.Name.Contains("2"))
+					{
+						return settings["ista_SC2"];
+					}
+					else if (value.Name.Contains("3"))
+					{
+						return settings["ista_SC3"];
+					}
 				}
 			}
 		}
 	}
-
-	//------Timmy Vermicellis------//
-	foreach(var timmy in vars.memoryWatchers)
-	{
-		if (timmy.Current == 1 && timmy.Old == 0 && current.gamestate != 0)
-		{
-			if (timmy.Name.Contains("miamTim"))
-			{
-				vars.timmyswastedinmiami++;
-				//print("Miami Timmy "+vars.timmyswastedinmiami+" wasted");
-				if (vars.timmyswastedinmiami == 10)
-				{
-					return settings["miam_allTVs"];
-				}
-				else
-				{
-					return settings["miam_TVs"];
-				}
-			}
-			else if (timmy.Name.Contains("niceTim"))
-			{
-				vars.timmyswastedinnice++;
-				//print("Nice Timmy "+vars.timmyswastedinnice+" wasted");
-				if (vars.timmyswastedinnice == 10)
-				{
-					return settings["nice_allTVs"];
-				}
-				else
-				{
-					return settings["nice_TVs"];
-				}
-			}
-			else if (timmy.Name.Contains("istaTim"))
-			{
-				vars.timmyswastedinistanbul++;
-				//print("Istanbul Timmy "+vars.timmyswastedinistanbul+" wasted");
-				if (vars.timmyswastedinistanbul == 10)
-				{
-					return settings["ista_allTVs"];
-				}
-				else
-				{
-					return settings["ista_TVs"];
-				}
-			}
-		}
-	}
-
 }
 
 reset
