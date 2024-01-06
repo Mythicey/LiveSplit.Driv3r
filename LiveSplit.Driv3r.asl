@@ -201,87 +201,33 @@ split{
 				{
 					vars.timmyswastedinmiami++;
 					//print("Miami Timmy "+vars.timmyswastedinmiami+" wasted");
-					if (vars.timmyswastedinmiami == 10)
-					{
-						return settings["miam_allTVs"];
-					}
-					else
-					{
-						return settings["miam_TVs"];
-					}
+					return ((vars.timmyswastedinmiami == 10 && settings["miam_allTVs"]) || settings["miam_TVs"]);
 				}
 				else if (value.Name.Contains("niceTim"))
 				{
 					vars.timmyswastedinnice++;
 					//print("Nice Timmy "+vars.timmyswastedinnice+" wasted");
-					if (vars.timmyswastedinnice == 10)
-					{
-						return settings["nice_allTVs"];
-					}
-					else
-					{
-						return settings["nice_TVs"];
-					}
+					return ((vars.timmyswastedinnice == 10 && settings["nice_allTVs"]) || settings["nice_TVs"]);
 				}
 				else if (value.Name.Contains("istaTim"))
 				{
 					vars.timmyswastedinistanbul++;
 					//print("Istanbul Timmy "+vars.timmyswastedinistanbul+" wasted");
-					if (vars.timmyswastedinistanbul == 10)
-					{
-						return settings["ista_allTVs"];
-					}
-					else
-					{
-						return settings["ista_TVs"];
-					}
+					return ((vars.timmyswastedinistanbul == 10 && settings["ista_allTVs"]) || settings["ista_TVs"]);
 				}
 				
 				//------Secret Cars------//
 				else if (value.Name.Contains("miamSC"))
 				{
-					if (value.Name.Contains("1"))
-					{
-						return settings["miam_SC1"];
-					}
-					else if (value.Name.Contains("2"))
-					{
-						return settings["miam_SC2"];
-					}
-					else if (value.Name.Contains("3"))
-					{
-						return settings["miam_SC3"];
-					}
+					return ((value.Name.Contains("1") && settings["miam_SC1"]) || (value.Name.Contains("2") && settings["miam_SC2"]) || (value.Name.Contains("3") && settings["miam_SC3"]));
 				}
 				else if (value.Name.Contains("niceSC"))
 				{
-					if (value.Name.Contains("1"))
-					{
-						return settings["nice_SC1"];
-					}
-					else if (value.Name.Contains("2"))
-					{
-						return settings["nice_SC2"];
-					}
-					else if (value.Name.Contains("3"))
-					{
-						return settings["nice_SC3"];
-					}
+					return ((value.Name.Contains("1") && settings["nice_SC1"]) || (value.Name.Contains("2") && settings["nice_SC2"]) || (value.Name.Contains("3") && settings["nice_SC3"]));
 				}
 				else if (value.Name.Contains("istaSC"))
 				{
-					if (value.Name.Contains("1"))
-					{
-						return settings["ista_SC1"];
-					}
-					else if (value.Name.Contains("2"))
-					{
-						return settings["ista_SC2"];
-					}
-					else if (value.Name.Contains("3"))
-					{
-						return settings["ista_SC3"];
-					}
+					return ((value.Name.Contains("1") && settings["ista_SC1"]) || (value.Name.Contains("2") && settings["ista_SC2"]) || (value.Name.Contains("3") && settings["ista_SC3"]));
 				}
 			}
 		}
